@@ -197,6 +197,12 @@ const config = {
             label: 'Get started',
           },
           {
+            type: 'docSidebar',
+            sidebarId: 'solutionsSidebar',
+            position: 'right',
+            label: 'Solutions',
+          },
+          {
             type: 'dropdown',
             label: 'Build apps',
             position: 'right',

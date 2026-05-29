@@ -1978,6 +1978,36 @@ const sidebars = {
       label: 'Upgrade for the Fusaka transition',
     },
   ],
+
+  solutionsSidebar: [
+    {
+      type: 'category',
+      label: 'Solutions',
+      collapsed: false,
+      items: [
+        {
+          type: 'doc',
+          id: 'solutions/cross-border-payments',
+          label: 'Cross-border payments',
+        },
+      ],
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/intro/glossary">Glossary<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/contribute">Contribute<span class="other-section-icon">↑</span></a>',
+    },
+  ],
 };
 
 module.exports = sidebars;
