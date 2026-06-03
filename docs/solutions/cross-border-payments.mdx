@@ -90,7 +90,7 @@ flowchart TD
 
 ### Reference architecture
 
-The diagram below shows how **institutional treasury and payment teams** typically wire partners for cross-border settlement on Arbitrum One. It is not a map of every fintech path; it highlights the stack most enterprise buyers use: compliance and orchestration offchain, stablecoin settlement on Arbitrum One, and fiat conversion through regulated partners.
+The diagram below shows how **treasury and payment teams** (from neobanks to global banks) typically wire partners for cross-border settlement on Arbitrum One. It is not a map of every fintech path; it highlights a common production stack: compliance and orchestration offchain, stablecoin settlement on Arbitrum One, and fiat conversion through regulated partners.
 
 **Fiat never settles on Arbitrum One** — only ERC-20 stablecoins do. Your bank or ramp partner converts fiat ↔ stablecoin; custody (or your treasury wallets) holds those assets onchain at Arbitrum addresses.
 
@@ -101,7 +101,7 @@ flowchart TB
         APP[Payment orchestration / treasury UI]
         KYC[Compliance screening]
         RAMPS[Fiat on- and off-ramps]
-        CUST[Institutional custody]
+        CUST[Custody partners]
         BRIDGE[Bridge / Circle CCTP]
     end
 
@@ -122,13 +122,13 @@ flowchart TB
     CUST -.->|Off-ramp to local fiat| RAMPS
 ```
 
-**How to read this flow (institutional):**
+**How to read this flow:**
 
 1. **Fund:** Fiat enters via your bank, [on-ramp partners](#payments-ecosystem), or custody partner; stablecoins land in **custody-controlled wallets** on Arbitrum One. Many teams also **bridge native USDC** (or use [Circle CCTP](https://www.circle.com/en/cross-chain-transfer-protocol)) from Ethereum into the same treasury wallets.
 2. **Program and execute:** Your **orchestration layer** applies policy (KYC, limits, approvals) offchain, then instructs custody or sends transactions on Arbitrum — directly over RPC (Mode 1) or through optional **smart contracts** (Mode 2).
 3. **Deliver:** Stablecoins move to **recipient wallets** (often via [ZeroDev](/for-devs/third-party-docs/ZeroDev/zero-dev) for embedded, gasless UX), or back through **custody → off-ramp** for local fiat. The four-stage overview above covers this end-to-end loop.
 
-Not every box is required for a pilot. Most institutions start with **custody + native USDC on Arbitrum One + one ramp partner**, then add contracts or dedicated-chain options when policy demands it.
+Not every box is required for a pilot. Most teams start with **custody + native USDC on Arbitrum One + one ramp partner**, then add contracts or dedicated-chain options when policy demands it.
 
 ## Choose your deployment mode
 
@@ -202,7 +202,7 @@ Arbitrum docs do not yet include reference contracts for treasury, batch payout,
 
 ### Mode 3: Launch a dedicated Arbitrum chain
 
-Deploy your **own Arbitrum chain** when you need control over network economics, fee denomination, permissions, and data visibility. This path fits institutions scaling proprietary payment infrastructure. You can deploy **your own payment smart contracts** on the chain (the same programmability as Mode 2) while adding chain-level controls that Arbitrum One alone cannot offer.
+Deploy your **own Arbitrum chain** when you need control over network economics, fee denomination, permissions, and data visibility. This path fits teams scaling proprietary payment infrastructure (neobanks, payment platforms, and banks). You can deploy **your own payment smart contracts** on the chain (the same programmability as Mode 2) while adding chain-level controls that Arbitrum One alone cannot offer.
 
 Most cross-border pilots use **existing** stablecoins (USDC, USDT, PYUSD, EUROe). Issuing a custom ERC-20 is uncommon for standard payout apps; it applies mainly when you need **tokenized deposits**, **bank-issued settlement assets**, or a **custom gas token** on your own chain — not typical Mode 1 or Mode 2 paths.
 
@@ -212,7 +212,7 @@ Most cross-border pilots use **existing** stablecoins (USDC, USDT, PYUSD, EUROe)
 - You need protocol-level compliance controls or restricted participation
 - Proprietary routing, FX, or counterparty data must not appear on a public ledger
 
-The diagram below is the **institutional dedicated-chain** view: your L2 still **anchors to Ethereum** for security, while you control sequencing policy, fee denomination, and what executes on your ledger. **Fiat stays offchain** (banks, ramps, custody); your chain settles **stablecoins and smart-contract logic** — the same separation as Arbitrum One, but on infrastructure you operate or permission.
+The diagram below is the **dedicated-chain** view: your L2 still **anchors to Ethereum** for security, while you control sequencing policy, fee denomination, and what executes on your ledger. **Fiat stays offchain** (banks, ramps, custody); your chain settles **stablecoins and smart-contract logic** — the same separation as Arbitrum One, but on infrastructure you operate or permission.
 
 ```mermaid
 %%{init: {'flowchart': {'nodeSpacing': 12, 'rankSpacing': 22}}}%%
@@ -239,7 +239,7 @@ flowchart TB
     STABLE -.->|Recipients · off-ramp| PARTNERS
 ```
 
-**How to read this flow (institutional):**
+**How to read this flow:**
 
 1. **Ethereum L1:** Your chain posts transaction data (and proofs, for Rollups) to **Ethereum** for security and finality. This is **not** where day-to-day stablecoin payouts settle — it is the trust anchor for your L2.
 2. **On your chain:** The **sequencer** orders transactions. **Payment contracts** (Mode 2-style logic) move **stablecoins** held on your chain. A **custom gas token** (optional) lets users and operators pay fees in USDC or USDT instead of ETH. **Compliance Engine** (coming soon) applies screening at the protocol level before transactions are included — not a separate step after your contracts run.
@@ -310,7 +310,7 @@ Map settlement assets to **destination market**, **liquidity**, and **issuer** r
     <tr>
       <td><strong>Bridged USDC (USDC.e)</strong></td>
       <td>Circle (via Arbitrum bridge)</td>
-      <td>Legacy bridged USDC from Ethereum; prefer native USDC for new institutional flows</td>
+      <td>Legacy bridged USDC from Ethereum; prefer native USDC for new production flows</td>
       <td><a href="/arbitrum-bridge/usdc-arbitrum-one">USDC on Arbitrum One</a></td>
     </tr>
     <tr>
@@ -380,13 +380,13 @@ Partners below support production payment stacks on Arbitrum. Links point to Arb
 | Banxa | Regulated fiat gateway | [Banxa documentation](https://docs.banxa.com/) *(external)* |
 | Transak | Fiat on- and off-ramp API | [Transak documentation](https://docs.transak.com/) *(external)* |
 
-### Institutional custody
+### Custody
 
 | Partner | Description | Documentation |
 | --- | --- | --- |
-| Fireblocks | Institutional wallet and treasury infrastructure | [Fireblocks documentation](https://developers.fireblocks.com/) *(external)* |
+| Fireblocks | Wallet and treasury infrastructure for regulated teams | [Fireblocks documentation](https://developers.fireblocks.com/) *(external)* |
 | BitGo | Qualified custody and wallet API | [BitGo documentation](https://developers.bitgo.com/) *(external)* |
-| Coinbase Institutional | Custody and trading for institutions | [Coinbase Institutional](https://www.coinbase.com/institutional) *(external)* |
+| Coinbase Institutional | Custody and trading (Coinbase product) | [Coinbase Institutional](https://www.coinbase.com/institutional) *(external)* |
 
 ### Compliance and analytics
 
