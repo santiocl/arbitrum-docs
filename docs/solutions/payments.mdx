@@ -32,12 +32,8 @@ content_type: concept
 
 Payments on Arbitrum replace fragmented settlement rails with a single programmable flow. For cross-border treasury and payouts, that means skipping multi-hop correspondent banking — fund in fiat or stablecoins, define your payout logic, and reconcile with a clear onchain audit trail. Arbitrum One offers deep dollar stablecoin liquidity (USDC, USDT, PYUSD) and non-USD-denominated options with meaningful onchain volume (for example EURe, MXNB, MYRC), as well as sub-cent transaction costs and 24/7 settlement, reducing the need to pre-fund nostro accounts across weekends and holidays.
 
-### Settlement finality
-
-Payments on Arbitrum reach **soft confirmation in sub-second** (sequencer inclusion) and **hard finality in minutes** once posted to Ethereum. See the [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle) and [security and finality for enterprise chains](https://blog.arbitrum.io/l1-vs-l2-choosing-the-right-chain-architecture-for-your-enterprise/#security-finality).
-
 :::info[Start on Arbitrum One]
-For most payment pilots, we recommend starting on Arbitrum One before building a [dedicated Arbitrum chain](#mode-3-launch-a-dedicated-arbitrum-chain). You get immediate access to billions in stablecoin liquidity with reduced infrastructure overhead.
+For most payment pilots, we recommend starting on Arbitrum One before building a [dedicated Arbitrum chain](#launch-a-dedicated-arbitrum-chain). You get immediate access to billions in stablecoin liquidity with reduced infrastructure overhead.
 :::
 
 ## How payments work on Arbitrum {#how-payments-work-on-arbitrum}
@@ -81,8 +77,8 @@ flowchart TD
     </tr>
     <tr>
       <td><strong>Execute</strong></td>
-      <td>Payouts settle on Arbitrum One in seconds</td>
-      <td><a href="/for-devs/third-party-docs/Circle/usdc-quickstart-guide">USDC quick start guide</a>, <a href="/how-arbitrum-works/deep-dives/transaction-lifecycle">Transaction lifecycle</a></td>
+      <td>Payouts settle on Arbitrum One in seconds; soft confirmation in sub-second, hard finality in minutes once posted to Ethereum</td>
+      <td><a href="/for-devs/third-party-docs/Circle/usdc-quickstart-guide">USDC quick start guide</a>, <a href="/how-arbitrum-works/deep-dives/transaction-lifecycle">Transaction lifecycle</a>, <a href="https://blog.arbitrum.io/l1-vs-l2-choosing-the-right-chain-architecture-for-your-enterprise/#security-finality">Security and finality</a> <em>(external)</em></td>
     </tr>
     <tr>
       <td><strong>Deliver</strong></td>
@@ -123,11 +119,11 @@ flowchart LR
 
 Bridge or Circle CCTP can fund treasury wallets via custody. Not every box is required — most pilots use **custody + native USDC + one ramp service provider**. See the [four-stage flow](#how-payments-work-on-arbitrum) above.
 
-## Choose your deployment mode
+## Choose your deployment path
 
-Three paths cover most payment builds: **Mode 1** settles on Arbitrum One without custom contracts; **Mode 2** adds payment smart contracts on Arbitrum One; **Mode 3** launches a dedicated Arbitrum chain when you need chain-level economics, compliance, or privacy. Details for each mode are below — use the [decision tree](#decision-tree) at the end of this section to choose.
+Three paths cover most payment builds: settle on Arbitrum One without custom contracts; add payment smart contracts on Arbitrum One; or launch a dedicated Arbitrum chain when you need chain-level economics, compliance, or privacy. Details for each path are below.
 
-### Mode 1: Settle on Arbitrum One (recommended for pilots)
+### Settle on Arbitrum One (recommended for pilots)
 
 Use Arbitrum One as your settlement rail. Your product submits stablecoin transfers (for example USDC) over standard RPC. No custom smart contracts are required on day one.
 
@@ -151,9 +147,9 @@ If payers or payees touch funds onchain, start with **[ZeroDev](https://docs.zer
 - [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees)
 - [How to estimate gas](/build-decentralized-apps/how-to-estimate-gas)
 
-### Mode 2: Build a payments application on Arbitrum One
+### Build a payments application on Arbitrum One
 
-Deploy **Solidity smart contracts** for treasury logic, routing, FX policy, or payout automation directly on Arbitrum One. Combine onchain execution with offchain compliance and fiat rails. If you later need chain-level control (custom gas, compliance engine, private execution), you can move to **Mode 3** and deploy the same style of contracts on your own chain.
+Deploy **Solidity smart contracts** for treasury logic, routing, FX policy, or payout automation directly on Arbitrum One. Combine onchain execution with offchain compliance and fiat rails. If you later need chain-level control (custom gas, compliance engine, private execution), you can [launch a dedicated Arbitrum chain](#launch-a-dedicated-arbitrum-chain) and deploy the same style of contracts there.
 
 **Choose this when:**
 
@@ -175,15 +171,15 @@ Deploy **Solidity smart contracts** for treasury logic, routing, FX policy, or p
 
 #### Private payments
 
-Confidential amounts and counterparties can be implemented at the **smart contract** layer on Arbitrum One or at **chain** level on a dedicated Arbitrum chain. On Arbitrum One, explore [Fhenix CoFHE](https://cofhe-docs.fhenix.zone/) (encrypted contract logic on Arbitrum Sepolia today) and [Railgun](https://railgun.org/) (private transfers). Chain-level private execution is on the [Mode 3](#mode-3-launch-a-dedicated-arbitrum-chain) roadmap. For architecture scoping, [contact Offchain Enterprise Services](https://www.offchain.io/contact).
+Confidential amounts and counterparties can be implemented at the **smart contract** layer on Arbitrum One or at **chain** level on a dedicated Arbitrum chain. On Arbitrum One, explore [Fhenix CoFHE](https://cofhe-docs.fhenix.zone/) (encrypted contract logic on Arbitrum Sepolia today) and [Railgun](https://railgun.org/) (private transfers). Chain-level private execution is on the [dedicated chain](#launch-a-dedicated-arbitrum-chain) roadmap. For architecture scoping, [contact Offchain Enterprise Services](https://www.offchain.io/contact).
 
 :::caution[Sample payment contracts]
 Arbitrum docs do not yet include reference contracts for treasury, batch payout, or remittance flows. For v1 pilots, use the [USDC quick start guide](/for-devs/third-party-docs/Circle/usdc-quickstart-guide) to validate settlement, then work with your engineering team or [contact Offchain Enterprise Services](https://www.offchain.io/contact) to design contract architecture.
 :::
 
-### Mode 3: Launch a dedicated Arbitrum chain {#mode-3-launch-a-dedicated-arbitrum-chain}
+### Launch a dedicated Arbitrum chain {#launch-a-dedicated-arbitrum-chain}
 
-Deploy your **own Arbitrum chain** when you need control over network economics, fee denomination, permissions, and data visibility. This path fits teams scaling proprietary payment infrastructure (neobanks, payment platforms, and banks). You can deploy **your own payment smart contracts** on the chain (the same programmability as Mode 2) while adding chain-level controls that Arbitrum One alone cannot offer.
+Deploy your **own Arbitrum chain** when you need control over network economics, fee denomination, permissions, and data visibility. This path fits teams scaling proprietary payment infrastructure (neobanks, payment platforms, and banks). You can deploy **your own payment smart contracts** on the chain (the same programmability as a payments application on Arbitrum One) while adding chain-level controls that Arbitrum One alone cannot offer.
 
 Many pilots settle in existing stablecoins (USDC, USDT, PYUSD, or non-USD-denominated assets such as EURe, MXNB, and MYRC). Teams can also issue a custom settlement token — for **tokenized deposits**, **bank-branded assets**, or a **custom gas token** on your chain. See [Issuing your own stablecoin](#issuing-your-own-stablecoin) or [contact Offchain Enterprise Services](https://www.offchain.io/contact) for issuance design.
 
@@ -201,11 +197,11 @@ flowchart TB
 
     subgraph Dedicated["Your dedicated Arbitrum chain"]
         SEQ[Sequencer]
-        CE[Compliance Engine<br/>Blacklist · whitelist (coming soon)]
-        CGT[Custom gas token<br/>fees e.g. USDC · USDT]
-        STABLE[Settlement stablecoins<br/>on your chain]
-        APP2[Your payment contracts]
-        PRIV[Private execution (coming soon)]
+        CE["Compliance Engine<br/>Blacklist · whitelist coming soon"]
+        CGT["Custom gas token<br/>fees e.g. USDC · USDT"]
+        STABLE["Settlement stablecoins<br/>on your chain"]
+        APP2["Your payment contracts"]
+        PRIV["Private execution coming soon"]
     end
 
     ETH <-->|Rollup or AnyTrust| SEQ
@@ -218,7 +214,7 @@ flowchart TB
     STABLE -.->|Recipients · off-ramp| PROVIDERS
 ```
 
-**Ethereum L1** anchors security and finality; **your chain** settles stablecoins and payment contracts; **service providers offchain** handle fiat (same pattern as the [reference architecture](#reference-architecture)). **Compliance Engine** (coming soon, **dedicated Arbitrum chains only**) screens transactions at inclusion — blacklist is rolling out; whitelist (coming soon) — deeper and more customizable than application-layer tools (for example Chainalysis on Arbitrum One). Mode 3 adds chain-level control — it does not replace [third-party service providers](#payments-ecosystem).
+**Ethereum L1** anchors security and finality; **your chain** settles stablecoins and payment contracts; **service providers offchain** handle fiat (same pattern as the [reference architecture](#reference-architecture)). **Compliance Engine** (coming soon, **dedicated Arbitrum chains only**) screens transactions at inclusion — blacklist is rolling out; whitelist (coming soon) — deeper and more customizable than application-layer tools (for example Chainalysis on Arbitrum One). A dedicated chain adds chain-level control — it does not replace [third-party service providers](#payments-ecosystem).
 
 **Core documentation:**
 
@@ -257,26 +253,6 @@ flowchart TB
 </table>
 
 Until these advanced features ship, [contact Offchain Enterprise Services](https://www.offchain.io/contact) to learn more about early access.
-
-### Decision tree {#decision-tree}
-
-```mermaid
-%%{init: {'flowchart': {'nodeSpacing': 12, 'rankSpacing': 26}}}%%
-flowchart TD
-    START([Payments use case]) --> Q1{Need chain-level control over<br/>network fees, compliance engine,<br/>or private execution?}
-    Q1 -->|Yes| M3[Mode 3<br/>Launch a dedicated Arbitrum chain]
-    Q1 -->|No| Q2{Need onchain policy enforced<br/>in smart contracts on Arbitrum One?}
-    Q2 -->|Yes| M2[Mode 2<br/>Build a payments app on Arbitrum One]
-    Q2 -->|No| M1[Mode 1<br/>Settle on Arbitrum One ✓ Pilot default]
-
-    M1 --> M1D[Stablecoin transfers via RPC or providers]
-    M2 --> M2D[Custom Solidity treasury and routing on Arbitrum One]
-    M3 --> M3D[Your chain + payment contracts + custom gas · compliance · privacy]
-
-    style M1 fill:#c8e6c9,stroke:#2e7d32
-```
-
-Most teams start in **Mode 1** and add Mode 2 or Mode 3 only when requirements demand it. The modes are **not mutually exclusive in capability**: Mode 3 is a **superset** — you can still deploy payment contracts on your chain, similar to Mode 2, while also controlling network fees, compliance, and data visibility.
 
 ## Choose stablecoins by corridor
 
@@ -442,15 +418,15 @@ Explore more projects on the [Arbitrum Portal](https://portal.arbitrum.io/).
 
 ## Recommended pilot checklist
 
-A minimal path from zero to a verified settlement on Arbitrum One. Skip steps that do not apply to your mode (see the [decision tree](#decision-tree)).
+A minimal path from zero to a verified settlement on Arbitrum One. Skip steps that do not apply to your [deployment path](#choose-your-deployment-path).
 
-1. **Pick a deployment mode.** Most pilots start with **Mode 1** (settle on Arbitrum One). Use Mode 2 if you need onchain treasury contracts; Mode 3 only if you need your own chain.
+1. **Pick a deployment path.** Most pilots start by settling on Arbitrum One without custom contracts. Add onchain treasury contracts if you need them; launch a dedicated chain only if you need chain-level control.
 
 2. **Pick a stablecoin for your corridor.** Dollar pilots: [native USDC on Arbitrum One](/arbitrum-bridge/usdc-arbitrum-one). See [Choose stablecoins by corridor](#choose-stablecoins-by-corridor) for USDT, PYUSD, or non-USD-denominated options (EURe, MXNB, MYRC).
 
 3. **Prove settlement on testnet.** Configure RPC via [Chain info](/for-devs/dev-tools-and-resources/chain-info) (chain ID `421614`), fund Sepolia ETH and USDC ([Circle faucet](https://faucet.circle.com/)), and complete a transfer with the [USDC quick start guide](/for-devs/third-party-docs/Circle/usdc-quickstart-guide). Confirm on [Arbitrum Sepolia Arbiscan](https://sepolia.arbiscan.io/).
 
-4. **Add ZeroDev if end users touch funds onchain.** Integrate [ZeroDev on Arbitrum](/for-devs/third-party-docs/ZeroDev/zero-dev) for passkey login and gasless payouts (Mode 1 and Mode 2). Skip this step if only your treasury wallet sends transfers.
+4. **Add ZeroDev if end users touch funds onchain.** Integrate [ZeroDev on Arbitrum](/for-devs/third-party-docs/ZeroDev/zero-dev) for passkey login and gasless payouts. Skip this step if only your treasury wallet sends transfers.
 
 5. **Wire production service providers before mainnet volume.** Choose on-ramps, custody, and compliance screening from the [payments ecosystem](#payments-ecosystem). Track payouts with [Allium on Arbitrum](https://docs.allium.so/historical-data/supported-blockchains/evm/arbitrum) when you need reconciliation at scale.
 
