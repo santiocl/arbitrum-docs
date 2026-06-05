@@ -1987,8 +1987,8 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'solutions/cross-border-payments',
-          label: 'Cross-border payments',
+          id: 'solutions/payments',
+          label: 'Payments',
         },
       ],
     },
